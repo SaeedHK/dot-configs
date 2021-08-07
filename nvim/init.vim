@@ -131,3 +131,15 @@ nnoremap <c-n> :call OpenTerminal()<CR>
 set clipboard=unnamedplus
 :set colorcolumn=100
 autocmd FileType latex,tex,md,markdown setlocal spell
+
+" Disable Arrow keys in Normal mode
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+
+" Disable Arrow keys in Insert mode
+imap <up> <nop>
+imap <down> <nop>
+imap <left> <nop>
+imap <right> <nop>
