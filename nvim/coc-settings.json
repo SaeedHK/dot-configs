@@ -1,7 +1,9 @@
 {
   "coc.preferences.extensionUpdateCheck": "daily",
-  "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnType": false,
   "coc.preferences.formatOnSaveFiletypes": [
+    "ruby",
+    "bash",
     "python",
     "markdown",
     "javascript",
@@ -11,8 +13,12 @@
     "html",
     "css",
     "scss",
-    "ruby",
-    "tex"
+    "tex",
+    "yaml",
+    "yml",
+    "jsx",
+    "javascriptreact",
+    "typescriptreact"
   ],
   "coc.source.file.ignoreHidden": false,
   "prettier.printWidth": 100,
@@ -31,21 +37,7 @@
   "list.insertMappings": {
     "<C-c>": "do:exit"
   },
-  "languageserver": {
-    "elmLS": {
-      "command": "elm-language-server",
-      "filetypes": ["elm"],
-      "rootPatterns": ["elm.json"]
-    }
-  },
   "codeLens.enable": true,
   "python.formatting.provider": "black",
-  "solargraph.autoformat": true,
-  "solargraph.completion": true,
-  "solargraph.diagnostics": true,
-  "solargraph.formatting": true,
-  "solargraph.hover": true,
-  "solargraph.rename": true,
-  "solargraph.promptDownload": false,
   "python.formatting.blackArgs": ["--line-length", "99"]
 }
