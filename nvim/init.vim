@@ -1,44 +1,4 @@
 " Saeed neovim config
-
-call plug#begin("~/.vim/plugged")
-
-  " Language Client
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
-
-  " TypeScript Highlighting
-  Plug 'pangloss/vim-javascript'
-  Plug 'leafgarland/typescript-vim'
-  Plug 'peitalin/vim-jsx-typescript'
-  Plug 'maxmellon/vim-jsx-pretty'
-
-
-  " File Explorer with Icons
-  Plug 'scrooloose/nerdtree'
-  Plug 'ryanoasis/vim-devicons'
-
-  " File Search
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'junegunn/fzf.vim'
-
-  " Ruby/Rails
-  " If you do `==` on a single line or a visual block vim will utomatically ident your Rails files. Cool, isn’t it? Veery useful 🙂
-  Plug 'vim-ruby/vim-ruby'
-  Plug 'tpope/vim-rails'
-
-  " AutoComplete
-  Plug 'Shougo/neocomplete.vim'
-
-  " Lorem Ipsum
-  Plug 'vim-scripts/loremipsum'
-
-  " TOML
-  Plug 'cespare/vim-toml'
-
-  Plug 'vim-airline/vim-airline'
-
-call plug#end()
-
 """"""""""""""""""""""""""""""
 " => Key bindings
 """"""""""""""""""""""""""""""
@@ -59,9 +19,11 @@ let mapleader = ' '
 
 " Fast saving/exit
 nmap <leader>w :w!<cr>
+
+""" Discard exiting from vim
 nmap <leader>q :q<cr>
 nmap <leader>qq :q!<cr>
-nmap <leader>x :x<cr>
+""nmap <leader>x :x<cr>
 
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
@@ -116,22 +78,110 @@ nnoremap <S-Tab> <<
 vnoremap <Tab>   >><Esc>gv
 vnoremap <S-Tab> <<<Esc>gv
 
+" braces auto comletetion
+inoremap { {}<Esc>ha
+inoremap ( ()<Esc>ha
+inoremap [ []<Esc>ha
+inoremap " ""<Esc>ha
+inoremap ' ''<Esc>ha
+inoremap ` ``<Esc>ha
+
 " Run macro’s with Q
 nnoremap Q @q
 
 " Consistent Y
 nnoremap Y y$
+nnoremap yw byw
+
+nnoremap vv V
+
+map <C-o> <C-n>
+
 
 " Smart way to move between windows
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+map <C-j> <C-W>j
+map <C-k> <C-W>k
 
 " Remap VIM 0 to first non-blank character
 map 0 ^
 
 " buffer management
-nnoremap <C-j> :bprev<CR>                                                                            
-nnoremap <C-k> :bnext<CR>
+
+" Get list of all buffers
+nnoremap <Leader>b :ls<CR>:b<Space>
+nnoremap <Leader>d :bd!<CR>
+
+nnoremap <Leader>h :bprevious<CR>
+nnoremap <Leader>l :bnext<CR>
+nnoremap <Leader>k :bfirst<CR>
+nnoremap <Leader>j :blast<CR>
+
+" Complementing Buffer flow with fzf
+nnoremap <Leader>p :Files<CR>
+nnoremap <Leader>f :Rg<CR>
+
+" Git
+" thanks to https://www.reddit.com/r/vim/comments/21f4gm/best_workflow_when_using_fugitive/
+nnoremap <Leader>ga :Git add %:p<CR><CR>
+nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gc :Gcommit -v -q<CR>
+nnoremap <Leader>gt :Gcommit -v -q %:p<CR>
+nnoremap <Leader>gd :Gdiff<CR>
+nnoremap <Leader>ge :Gedit<CR>
+nnoremap <Leader>gr :Gread<CR>
+nnoremap <Leader>gw :Gwrite<CR><CR>
+nnoremap <Leader>gl :silent! Glog<CR>:bot copen<CR>
+nnoremap <Leader>gp :Ggrep<Space>
+nnoremap <Leader>gm :Gmove<Space>
+nnoremap <Leader>gb :Git branch<Space>
+nnoremap <Leader>go :Git checkout<Space>
+nnoremap <Leader>gps :Dispatch! git push<CR>
+nnoremap <Leader>gpl :Dispatch! git pull<CR>
+
+
+"=============================== NERDTree
+" Here are the basics of how to use the plugin:
+"    Use the natural vim navigation keys hjkl to navigate the files.
+"    Press o to open the file in a new buffer or open/close directory.
+"    Press t to open the file in a new tab.
+"    Press i to open the file in a new horizontal split.
+"    Press s to open the file in a new vertical split.
+"    Press p to go to parent directory.
+"    Press r to refresh the current directory.
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = []
+let g:NERDTreeStatusline = ''
+" Automaticaly close nvim if NERDTree is only thing left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Toggle
+nnoremap <silent> <C-b> :NERDTreeToggle<CR>
+
+""nnoremap <leader>r :FZF<CR>
+""let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+
+let g:vimrubocop_keymap = 0
+nmap <Leader>rr :RuboCop -a<CR>
+
+" Terminal -------------------------
+" uses zsh instead of bash
+function! OpenTerminal()
+  tabnew term://zsh
+endfunction
+nnoremap <leader>n :call OpenTerminal()<CR>
+" move to insert mode while opening terminal
+" start terminal in insert mode
+autocmd TermOpen * startinsert
+
+nmap <Leader>vc :e $MYVIMRC<CR>
+nmap <Leader>vr :source $MYVIMRC<CR>
+
+set splitright
+set splitbelow
+set colorcolumn=120
+set clipboard=unnamedplus
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -262,8 +312,8 @@ set expandtab
 set smarttab
 
 " 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=2
+set tabstop=2
 
 " Linebreak on 500 characters
 set lbr
@@ -274,29 +324,47 @@ set si "Smart indent
 set wrap "Wrap lines
 
 
-" NERDTree
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeIgnore = []
-let g:NERDTreeStatusline = ''
-" Automaticaly close nvim if NERDTree is only thing left open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" Toggle
-nnoremap <silent> <leader>b :NERDTreeToggle<CR>
+call plug#begin("~/.vim/plugged")
 
-nnoremap <leader>r :FZF<CR>
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+  " Language Client
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
 
-" Terminal -------------------------
-" uses zsh instead of bash
-function! OpenTerminal()
-  tabnew term://zsh
-endfunction
-nnoremap <leader>n :call OpenTerminal()<CR>
-" move to insert mode while opening terminal
-" start terminal in insert mode
-autocmd TermOpen * startinsert
+  " TypeScript Highlighting
+  Plug 'pangloss/vim-javascript'
+  Plug 'leafgarland/typescript-vim'
+  Plug 'peitalin/vim-jsx-typescript'
+  Plug 'maxmellon/vim-jsx-pretty'
 
-set splitright
-set splitbelow
-set colorcolumn=120
+
+  " File Explorer with Icons
+  Plug 'scrooloose/nerdtree'
+  Plug 'ryanoasis/vim-devicons'
+
+  " File Search
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+
+  " Ruby/Rails
+  " If you do `==` on a single line or a visual block vim will utomatically ident your Rails files. Cool, isn’t it? Veery useful 🙂
+  Plug 'vim-ruby/vim-ruby'
+  Plug 'tpope/vim-rails'
+  Plug 'ngmy/vim-rubocop'
+
+  " AutoComplete
+  Plug 'Shougo/neocomplete.vim'
+
+  " Lorem Ipsum
+  Plug 'vim-scripts/loremipsum'
+
+  " TOML
+  Plug 'cespare/vim-toml'
+
+  " airline
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+
+  Plug 'tpope/vim-fugitive'
+
+call plug#end()
+
