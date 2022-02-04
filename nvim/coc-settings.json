@@ -14,8 +14,6 @@
     "css",
     "scss",
     "tex",
-    "yaml",
-    "yml",
     "jsx",
     "javascriptreact",
     "typescriptreact"
@@ -24,6 +22,8 @@
   "prettier.printWidth": 100,
   "prettier.singleQuote": true,
   "prettier.eslintIntegration": true,
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true,
   "signature.target": "echo",
   "diagnostic.format": "%message [%source]",
   "diagnostic.virtualText": true,
