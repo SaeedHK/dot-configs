@@ -1,43 +1,98 @@
 {
-  "coc.preferences.extensionUpdateCheck": "daily",
-  "coc.preferences.formatOnType": false,
-  "coc.preferences.formatOnSaveFiletypes": [
-    "ruby",
-    "bash",
-    "python",
-    "markdown",
-    "javascript",
-    "typescript",
-    "json",
-    "jsonc",
-    "html",
-    "css",
-    "scss",
-    "tex",
-    "jsx",
-    "javascriptreact",
-    "typescriptreact"
-  ],
-  "coc.source.file.ignoreHidden": false,
-  "prettier.printWidth": 100,
-  "prettier.singleQuote": true,
-  "prettier.eslintIntegration": true,
-  "javascript.suggest.autoImports": true,
-  "typescript.suggest.autoImports": true,
-  "signature.target": "echo",
-  "diagnostic.format": "%message [%source]",
-  "diagnostic.virtualText": true,
-  "diagnostic.checkCurrentLine": true,
-  "diagnostic.separateRelatedInformationAsDiagnostics": true,
-  "suggest.timeout": 5000,
-  "suggest.asciiCharactersOnly": true,
-  "list.normalMappings": {
-    "<C-c>": "do:exit"
-  },
-  "list.insertMappings": {
-    "<C-c>": "do:exit"
-  },
-  "codeLens.enable": true,
-  "python.formatting.provider": "black",
-  "python.formatting.blackArgs": ["--line-length", "99"]
+ "coc.preferences.extensionUpdateCheck": "daily",
+ "coc.preferences.formatOnType": false,
+ "coc.preferences.formatOnSaveFiletypes": [
+  "ruby",
+  "python",
+  "bash",
+  "markdown",
+  "javascript",
+  "typescript",
+  "json",
+  "jsonc",
+  "html",
+  "css",
+  "scss",
+  "tex",
+  "jsx",
+  "javascriptreact",
+  "typescriptreact"
+ ],
+ "coc.source.file.ignoreHidden": false,
+ "prettier.printWidth": 100,
+ "prettier.singleQuote": true,
+ "prettier.tabWidth": 1,
+ "javascript.suggest.autoImports": true,
+ "typescript.suggest.autoImports": true,
+ "signature.target": "echo",
+ "diagnostic.format": "%message [%source]",
+ "diagnostic.virtualText": true,
+ "diagnostic.checkCurrentLine": true,
+ "diagnostic.separateRelatedInformationAsDiagnostics": true,
+ "suggest.timeout": 5000,
+ "suggest.asciiCharactersOnly": true,
+ "list.normalMappings": {
+  "<C-c>": "do:exit"
+ },
+ "list.insertMappings": {
+  "<C-c>": "do:exit"
+ },
+ "codeLens.enable": true,
+ // "python.formatting.provider": "ruff",
+ // "python.linting.ruffEnabled": true,
+ // "pyright.organizeimports.provider": "ruff",
+ "python.formatting.provider": "black",
+ "python.formatting.blackPath": "/opt/homebrew/bin/black",
+ "pyright.organizeimports.provider": "isort",
+ "pyright.enable": true,
+ "languageserver": {
+  "haskell": {
+   "command": "haskell-language-server",
+   "args": ["--lsp"],
+   "rootPatterns": [".stack.yaml", ".hie-bios", "BUILD.bazel", "cabal.config", "package.yaml"],
+   "filetypes": ["hs", "lhs", "haskell"]
+  }
+ },
+
+ // Specify file types to spell check.
+ "cSpell.enabledLanguageIds": [
+  "csharp",
+  "go",
+  "javascript",
+  "javascriptreact",
+  "markdown",
+  "php",
+  "plaintext",
+  "typescript",
+  "typescriptreact",
+  "yml"
+ ],
+ // Enable / Disable the spell checker.
+ "cSpell.enabled": true,
+ "cSpell.showStatus": true,
+ "cSpell.ignoreWords": [
+  "behaviour",
+  "unavailabilities",
+  "pmax",
+  "uuid",
+  "cegedim",
+  "iban",
+  "upsert",
+  "axios"
+ ],
+
+ // User words to add to dictionary.  Should only be in the user settings.
+ "cSpell.userWords": [],
+
+ // Specify paths/files to ignore.
+ "cSpell.ignorePaths": [
+  "node_modules", // this will ignore anything the node_modules directory
+  "**/node_modules", // the same for this one
+  "**/node_modules/**", // the same for this one
+  "node_modules/**", // Doesn't currently work due to how the current working directory is determined.
+  "vscode-extension", //
+  ".git", // Ignore the .git directory
+  "*.dll", // Ignore all .dll files.
+  "**/*.dll" // Ignore all .dll files
+ ]
 }

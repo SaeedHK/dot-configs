@@ -2,13 +2,18 @@
 """"""""""""""""""""""""""""""
 " => Key bindings
 """"""""""""""""""""""""""""""
+set termbidi
+let g:loaded_perl_provider = 0
 
-" Map Esc to JJ
+" Map Esc to JJ and KK
 imap jj <Esc>
+imap kk <Esc>
+
 " turn terminal to normal mode with escape
 tnoremap <S-Tab> <C-\><C-n>
 tnoremap <Esc> <C-\><C-n>
 tnoremap jj <C-\><C-n>
+tnoremap kk <C-\><C-n>
 
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
@@ -61,10 +66,9 @@ noremap L     $
 ""imap <Down>  <Nop>
 ""imap <Left>  <Nop>
 ""imap <Right> <Nop>
-inoremap <C-k> <Up>
-inoremap <C-j> <Down>
-inoremap <C-h> <Left>
-inoremap <C-l> <Right>
+imap <C-k> <C-p>
+imap <C-j> <C-n>
+imap <C-l> <C-n><C-p>
 
 " Tab and Shift-Tab to indent and de-indent
 nmap >> <Nop>
@@ -80,8 +84,8 @@ vnoremap <S-Tab> <<<Esc>gv
 inoremap { {}<Esc>ha
 inoremap ( ()<Esc>ha
 inoremap [ []<Esc>ha
-inoremap " ""<Esc>ha
-inoremap ' ''<Esc>ha
+""inoremap " ""<Esc>ha
+""inoremap ' ''<Esc>ha
 inoremap ` ``<Esc>ha
 
 " Run macro’s with Q
@@ -92,16 +96,24 @@ nnoremap Q @q
 nnoremap d "*d
 nnoremap dd "*dd
 nnoremap D "*D
+nnoremap x "_x
 nnoremap Y y$
-nnoremap yw byw
+nnoremap yw bywe
 
 " Block selection"
 nnoremap vv V
 nnoremap vb <C-v>
 vnoremap ii I
 
+" If PUM (complete menu) is visible, then execute <C-y> (which selects an item), otherwise, do a normal tab.
+inoremap <expr> <TAB> pumvisible() ? "<C-y>" : "<TAB>"
+
 " Search mode
-nnoremap <Leader>s /
+nnoremap <Leader>a /
+nnoremap <Leader>fr :%s/find/replace/gc
+
+" Copy path to clipboard
+nmap <Leader>ff :let @+ = expand("%")<CR>
 
 " Smart way to move between windows
 map <C-h> <C-W>h
@@ -120,30 +132,35 @@ nnoremap <Leader>d :bd!<CR>
 
 nnoremap <Leader>h :bprevious<CR>
 nnoremap <Leader>l :bnext<CR>
+nnoremap <Leader>l :bnext<CR>
 "" nnoremap <Leader>k :bfirst<CR>
 "" nnoremap <Leader>j :blast<CR>
 
 " Complementing Buffer flow with fzf
 nnoremap <Leader>n :Files<CR>
 nnoremap <Leader>f :Rg<CR>
+nnoremap <Leader>rf :s/foo/bar/gc 
 
 " Git
 " thanks to https://www.reddit.com/r/vim/comments/21f4gm/best_workflow_when_using_fugitive/
 "  
 nnoremap <Leader>g :Git<space>
 ""nnoremap <Leader>ga :Git add %:p<CR><CR>
-nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gg :vertical :Git<CR>
+nnoremap <leader>gs :Magit<CR>
 nnoremap <Leader>gp :Git push<CR>
 ""nnoremap <Leader>gc :Git commit -v -q<CR>
 ""nnoremap <Leader>gt :Git commit -v -q %:p<CR>
-nnoremap <Leader>gd :Git diff<CR>
+nnoremap <Leader>gd :vertical :Git diff<CR>
 ""nnoremap <Leader>ge :Git edit<CR>
 ""nnoremap <Leader>gr :Git read<CR>
 ""nnoremap <Leader>gw :Git write<CR><CR>
 ""nnoremap <Leader>gl :silent! Git log<CR>
 ""nnoremap <Leader>gm :Gmove<Space>
 ""nnoremap <Leader>gb :Git branch<Space>
-""nnoremap <Leader>go :Git checkout<Space>
+nnoremap <Leader>go :Git checkout<Space>
+nnoremap <Leader>gcm :Git checkout master<CR>
+nnoremap <Leader>gcd :Git checkout dev<CR>
 ""nnoremap <Leader>gps :Dispatch! git push<CR>
 ""nnoremap <Leader>gpl :Dispatch! git pull<CR>
  
@@ -155,8 +172,6 @@ nnoremap <Leader>gd :Git diff<CR>
 ""nmap <Leader>ga :GitGutterStageHunk<CR>
 ""nmap <Leader>gu :GitGutterUndoHunk<CR>
 
-nnoremap <leader>gs :Magit<CR>       " git status
-
 " these mappings work well when Caps Lock is mapped to Ctrl
 nmap <silent> <Leader>tn :TestNearest<CR>
 nmap <silent> <Leader>tf :TestFile<CR>
@@ -165,12 +180,11 @@ nmap <silent> <Leader>tl :TestLast<CR>
 nmap <silent> <Leader>tg :TestVisit<CR>
 
 " vim config file"
-nmap <Leader>vc :e $MYVIMRC<CR>
 nmap <Leader>vr :source $MYVIMRC<CR>
 
 set splitright
 set splitbelow
-set colorcolumn=120
+set colorcolumn=99
 set clipboard=unnamedplus
 set updatetime=250
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -215,7 +229,7 @@ set cmdheight=1
 set hid
 
 " Configure backspace so it acts as it should act
-" "set backspace=eol,start,indent
+set backspace=eol,start,indent
 " "set whichwrap+=<,>,h,l
 
 " Ignore case when searching
@@ -255,6 +269,10 @@ endif
 
 " Add a bit extra margin to the left
 set foldcolumn=1
+
+" Spell checker
+" set spell spelllang=en_us
+set nospell
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -324,26 +342,54 @@ set scl=yes  " force the signcolumn to appear
 "    Press s to open the file in a new vertical split.
 "    Press p to go to parent directory.
 "    Press r to refresh the current directory.
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeIgnore = []
-let g:NERDTreeStatusline = ''
+" let g:NERDTreeShowHidden = 1
+" let g:NERDTreeMinimalUI = 1
+" let g:NERDTreeIgnore = []
+" let g:NERDTreeStatusline = ''
+"
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 " Toggle
-nnoremap <silent> <C-b> :NERDTreeToggle<CR>
+nnoremap <leader>b :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+nnoremap <Leader>m :NERDTreeFind<CR>
 
 ""nnoremap <leader>r :FZF<CR>
 ""let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 let g:vimrubocop_keymap = 0
 nmap <Leader>rr :RuboCop -a<CR>
+nmap <Leader>ra :RuboCop -A<CR>
 nmap <Leader>rt :Rufo<CR>
+nmap <Leader>is :Isort<CR>
+
+""STREEM""
+nmap <Leader>ss :cd $STREEM_APP_ROOT<CR>
+
+""OPEN ZSH CONFIG""
+nmap <Leader>oz :e ~/.zshrc<CR>
+
+""OPEN ALACRITY CONFIG""
+nmap <Leader>oa :e ~/.config/alacritty/alacritty.yml<CR>
+
+""OPEN VIM CONFIG""
+nmap <Leader>ov :e $MYVIMRC<CR>
+
+""OPEN TMUX CONFIG""
+nmap <Leader>ot :e ~/.tmux.conf<CR>
+
+""SPLITS
+nmap <Leader>sn :vnew<CR>
+nmap <Leader>sh :new<CR>
 
 " Terminal -------------------------
 " uses zsh instead of bash
 function! OpenTerminal()
   tabnew term://zsh
 endfunction
+
 nnoremap <leader>tt :call OpenTerminal()<CR>
 " move to insert mode while opening terminal
 " start terminal in insert mode
@@ -361,11 +407,73 @@ let g:goyo_width=100
 let g:goyo_margin_top = 2
 let g:goyo_margin_bottom = 2
 
+" Spelunker
+let g:spelunker_white_list_for_user = ['siret'
+      \, 'tanphi'
+      \, 'tan'
+      \, 'phi'
+      \, 'consigne'
+      \, 'numericality'
+      \, 'upsert'
+      \, 'consigne'
+      \, 'reactif'
+      \, 'uuid'
+      \, 'compteur'
+      \, 'compteurs'
+      \, 'xpath'
+      \, 'cegedim'
+      \, 'streem'
+      \, 'webdriver'
+      \, 'webelement'
+      \, 'invoicing'
+      \, 'conso'
+      \, 'winshuttle'
+      \, 'engie'
+      \, 'capa'
+      \, 'salesfocus'
+      \, 'datadog'
+      \, 'iban'
+      \, 'invoicing'
+      \, 'invoicings'
+      \, 'linspace'
+      \, 'linewidth'
+      \, 'upsert'
+      \, 'axios'
+      \, 'omniAuth'
+      \, 'saml'
+      \, 'byebug'
+      \, 'eventable'
+      \, 'eventables'
+      \, 'loadcurve'
+      \, 'loadcurves'
+      \, 'productible'
+      \, 'unavailability'
+      \, 'unavailabilities'
+      \, 'emsys'
+      \, 'tokenizer'
+      \, 'pretrained'
+      \, 'opex'
+      \, 'generix'
+      \]
+
+" Testing
+let g:test#javascript#cypress#options = 'run --headed'
+" let test#ruby#rspec#executable = 'zeus rspec'
+
 call plug#begin("~/.vim/plugged")
 
   " Language Client
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
+  let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-eslint', 'coc-tsserver', 'coc-prettier', 'coc-pyright', 'coc-spell-checker']
+  " Plug 'yaegassy/coc-pylsp', {'do': 'yarn install --frozen-lockfile'}
+  autocmd FileType python let b:coc_root_patterns = ['.venv']
+
+  " Plug 'yaegassy/coc-ruff', {'do': 'yarn install --frozen-lockfile'}
+
+  "ALE
+  ""Plug 'dense-analysis/ale'
+  ""let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'haskell': ['ormolu']}
+  ""let g:ale_fix_on_save = 1
 
   " TypeScript Highlighting
   Plug 'pangloss/vim-javascript'
@@ -389,10 +497,8 @@ call plug#begin("~/.vim/plugged")
   Plug 'ruby-formatter/rufo-vim'
 
   " AutoComplete
-  Plug 'Shougo/neocomplete.vim'
-
-  " Lorem Ipsum
-  Plug 'vim-scripts/loremipsum'
+  " Plug 'Shougo/neocomplete.vim'
+  " Plug 'ycm-core/YouCompleteMe'
 
   " TOML
   Plug 'cespare/vim-toml'
@@ -412,13 +518,21 @@ call plug#begin("~/.vim/plugged")
   " Goyo
   Plug 'junegunn/goyo.vim'
 
-  " Comment codes
-  Plug 'preservim/nerdcommenter'
+  "Pyhton
+  ""Plug 'vim-syntastic/syntastic'
+  Plug 'fisadev/vim-isort'
+  ""Plug 'stsewd/isort.nvim', { 'do': ':UpdateRemotePlugins' }
 
-  " Bootstrap
-  Plug 'jvanja/vim-bootstrap4-snippets'
+  Plug 'ttibsi/pre-commit.nvim'
 
-  " github colors
-  Plug 'cormacrelf/vim-colors-github'
+  "" js imports
+  " Plug 'ludovicchabant/vim-gutentags'
+  Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
+
+  "Github Copilot
+  Plug 'github/copilot.vim'
+
+  " spell check
+  Plug 'kamykn/spelunker.vim'
 
 call plug#end()
