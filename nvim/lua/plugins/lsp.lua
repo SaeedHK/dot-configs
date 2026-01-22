@@ -3,6 +3,7 @@ return {
   {
     "williamboman/mason.nvim",
     cmd = "Mason",
+    event = { "BufReadPre", "BufNewFile" },
     build = ":MasonUpdate",
     config = function()
       require("mason").setup({
@@ -20,37 +21,15 @@ return {
   -- Mason-lspconfig bridge
   {
     "williamboman/mason-lspconfig.nvim",
-    dependencies = { "williamboman/mason.nvim" },
-    config = function()
-      require("mason-lspconfig").setup({
-        ensure_installed = {
-          "lua_ls",
-          "ts_ls",
-          "html",
-          "cssls",
-          "jsonls",
-          "pyright",
-          "ruby_lsp",
-          "eslint",
-        },
-        automatic_installation = true,
-      })
-    end,
-  },
-
-  -- LSP Config
-  {
-    "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
+      "neovim/nvim-lspconfig",
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
       local lspconfig = require("lspconfig")
       local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
       local capabilities = cmp_nvim_lsp.default_capabilities()
 
       -- Diagnostic config
@@ -62,77 +41,75 @@ return {
         severity_sort = true,
         float = {
           border = "rounded",
-          source = "always",
+          source = true,
         },
       })
 
-      -- LSP keymaps
-      local on_attach = function(client, bufnr)
-        local map = function(keys, func, desc)
-          vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
-        end
+      -- LSP keymaps via LspAttach autocmd
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+        callback = function(ev)
+          local bufnr = ev.buf
+          local map = function(keys, func, desc)
+            vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
+          end
 
-        map("gd", vim.lsp.buf.definition, "Go to definition")
-        map("gD", vim.lsp.buf.declaration, "Go to declaration")
-        map("gr", vim.lsp.buf.references, "Go to references")
-        map("gi", vim.lsp.buf.implementation, "Go to implementation")
-        map("gt", vim.lsp.buf.type_definition, "Go to type definition")
-        map("<leader>rn", vim.lsp.buf.rename, "Rename")
-        map("<leader>ca", vim.lsp.buf.code_action, "Code action")
-        map("gK", vim.lsp.buf.hover, "Hover documentation")
-        map("<leader>e", vim.diagnostic.open_float, "Show diagnostics")
-        map("[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-        map("]d", vim.diagnostic.goto_next, "Next diagnostic")
-        map("<leader>lf", function()
-          vim.lsp.buf.format({ async = true })
-        end, "Format buffer")
-      end
+          map("gd", vim.lsp.buf.definition, "Go to definition")
+          map("gD", vim.lsp.buf.declaration, "Go to declaration")
+          map("gr", vim.lsp.buf.references, "Go to references")
+          map("gi", vim.lsp.buf.implementation, "Go to implementation")
+          map("gt", vim.lsp.buf.type_definition, "Go to type definition")
+          map("<leader>rn", vim.lsp.buf.rename, "Rename")
+          map("<leader>ca", vim.lsp.buf.code_action, "Code action")
+          map("gK", vim.lsp.buf.hover, "Hover documentation")
+          map("<leader>e", vim.diagnostic.open_float, "Show diagnostics")
+          map("[d", function() vim.diagnostic.jump({ count = -1 }) end, "Previous diagnostic")
+          map("]d", function() vim.diagnostic.jump({ count = 1 }) end, "Next diagnostic")
+          map("<leader>lf", function()
+            vim.lsp.buf.format({ async = true })
+          end, "Format buffer")
+        end,
+      })
 
-      -- Server configs
-      local servers = {
-        lua_ls = {
-          settings = {
-            Lua = {
-              diagnostics = { globals = { "vim" } },
-              workspace = { checkThirdParty = false },
-              telemetry = { enable = false },
-            },
-          },
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "ts_ls",
+          "html",
+          "cssls",
+          "jsonls",
+          "pyright",
+          "eslint",
         },
-        ts_ls = {},
-        html = {},
-        cssls = {},
-        jsonls = {},
-        pyright = {
-          settings = {
-            python = {
-              analysis = {
-                typeCheckingMode = "basic",
+        automatic_installation = true,
+        handlers = {
+          -- Default handler for all servers
+          function(server_name)
+            lspconfig[server_name].setup({
+              capabilities = capabilities,
+            })
+          end,
+          -- Custom handler for pyright
+          ["pyright"] = function()
+            lspconfig.pyright.setup({
+              capabilities = capabilities,
+              settings = {
+                python = {
+                  analysis = {
+                    typeCheckingMode = "basic",
+                  },
+                },
               },
-            },
-          },
-        },
-        ruby_lsp = {},
-        eslint = {
-          on_attach = function(client, bufnr)
-            on_attach(client, bufnr)
-            vim.api.nvim_create_autocmd("BufWritePre", {
-              buffer = bufnr,
-              command = "EslintFixAll",
             })
           end,
         },
-        hls = {}, -- Haskell
-      }
-
-      for server, config in pairs(servers) do
-        config.capabilities = capabilities
-        if not config.on_attach then
-          config.on_attach = on_attach
-        end
-        lspconfig[server].setup(config)
-      end
+      })
     end,
+  },
+
+  -- LSP Config (loaded as dependency)
+  {
+    "neovim/nvim-lspconfig",
+    lazy = true,
   },
 
   -- Autocompletion

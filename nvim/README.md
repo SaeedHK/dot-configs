@@ -1,14 +1,20 @@
 # Neovim Configuration
 
-Modern Lua-based Neovim configuration using lazy.nvim plugin manager.
+Modern Lua-based Neovim configuration using lazy.nvim plugin manager and native LSP.
 
 ## Requirements
 
-- Neovim >= 0.9.0
+- **Neovim >= 0.11.0** (uses native `vim.lsp.config` API)
 - Git
 - A [Nerd Font](https://www.nerdfonts.com/) (for icons)
 - ripgrep (for Telescope live grep)
-- Node.js (for some LSP servers)
+- Node.js (for TypeScript/JavaScript LSP servers)
+
+### Optional (for additional LSP servers)
+
+- **Ruby** (`gem`) - for ruby_lsp (uncomment in `lsp.lua`)
+- **Haskell** (`ghcup`) - for hls
+- **Python** (`pip`) - pyright is installed via npm
 
 ## Structure
 
@@ -24,13 +30,28 @@ Modern Lua-based Neovim configuration using lazy.nvim plugin manager.
 │       ├── copilot.lua      # GitHub Copilot
 │       ├── editing.lua      # Autopairs, comment, surround, zen-mode
 │       ├── git.lua          # Gitsigns, fugitive, lazygit
-│       ├── lsp.lua          # Mason, LSP, nvim-cmp, conform
+│       ├── lsp.lua          # Mason, native LSP, nvim-cmp, conform
 │       ├── nvim-tree.lua    # File explorer
 │       ├── telescope.lua    # Fuzzy finder
 │       ├── testing.lua      # Neotest
 │       ├── treesitter.lua   # Syntax highlighting
 │       └── ui.lua           # Lualine, which-key, noice
 ```
+
+## LSP Servers (auto-installed via Mason)
+
+- `lua_ls` - Lua
+- `ts_ls` - TypeScript/JavaScript
+- `html` - HTML
+- `cssls` - CSS
+- `jsonls` - JSON
+- `pyright` - Python
+- `eslint` - JavaScript/TypeScript linting
+
+### Disabled by default (uncomment in `lsp.lua` when dependencies are installed)
+
+- `ruby_lsp` - Ruby (requires `gem`)
+- `hls` - Haskell (requires `ghcup`)
 
 ## Key Bindings
 
@@ -101,6 +122,16 @@ Leader key: `<Space>`
 | `<leader>gb` | Blame line |
 | `]c` / `[c` | Next/previous hunk |
 
+### GitHub Copilot
+
+| Key | Action |
+|-----|--------|
+| `<M-l>` | Accept suggestion |
+| `<M-w>` | Accept word |
+| `<M-e>` | Accept line |
+| `<M-]>` / `<M-[>` | Next/previous suggestion |
+| `<C-]>` | Dismiss suggestion |
+
 ### Testing
 
 | Key | Action |
@@ -128,11 +159,12 @@ Leader key: `<Space>`
 2. Run `:Mason` to manage LSP servers
 3. Run `:Lazy` to manage plugins
 4. Run `:checkhealth` to verify setup
+5. Run `:Copilot auth` to authenticate GitHub Copilot
 
 ## Included Plugins
 
 - **Plugin Manager**: lazy.nvim
-- **LSP**: mason.nvim, nvim-lspconfig, nvim-cmp
+- **LSP**: mason.nvim, nvim-lspconfig (native API), nvim-cmp
 - **Syntax**: nvim-treesitter
 - **Fuzzy Finder**: telescope.nvim
 - **File Explorer**: nvim-tree.lua

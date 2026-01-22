@@ -24,7 +24,7 @@ opt.scrolloff = 7
 opt.colorcolumn = "99"
 opt.foldcolumn = "1"
 opt.cmdheight = 1
-opt.lazyredraw = true
+-- opt.lazyredraw = true  -- conflicts with Noice, only set temporarily
 
 -- Search
 opt.ignorecase = true

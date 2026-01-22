@@ -2,12 +2,15 @@ return {
   -- Lualine (statusline)
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      "catppuccin/nvim",
+    },
     event = "VeryLazy",
     config = function()
       require("lualine").setup({
         options = {
-          theme = "catppuccin",
+          theme = "auto",
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
           globalstatus = true,
