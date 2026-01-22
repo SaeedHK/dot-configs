@@ -33,6 +33,11 @@ map({ "n", "v" }, "J", "}", opts)
 map({ "n", "v" }, "H", "^", opts)
 map({ "n", "v" }, "L", "$", opts)
 
+-- Restore lost functionality from HJKL remaps
+map("n", "gj", "J", opts) -- Join lines
+map("n", "gh", "H", opts) -- Screen top
+map("n", "gl", "L", opts) -- Screen bottom
+
 -- Tab/Shift-Tab for indent
 map("n", "<Tab>", ">>", opts)
 map("n", "<S-Tab>", "<<", opts)
@@ -45,10 +50,8 @@ map("n", "Q", "@q", opts)
 -- Better yank/delete
 map("n", "Y", "y$", opts)
 map("n", "X", "v$x", opts)
-map("n", "yw", "yiw", opts)
 
 -- Block selection
-map("n", "vv", "V", opts)
 map("n", "vb", "<C-v>", opts)
 map("v", "ii", "I", opts)
 
@@ -65,8 +68,9 @@ map("n", "<C-l>", "<C-W>l", opts)
 map("n", "<C-j>", "<C-W>j", opts)
 map("n", "<C-k>", "<C-W>k", opts)
 
--- Remap 0 to first non-blank
+-- Remap 0 to first non-blank (use g0 for actual column 0)
 map("n", "0", "^", opts)
+map("n", "g0", "0", opts)
 
 -- Buffer management
 map("n", "<leader>b", ":ls<CR>:b<Space>", { noremap = true })

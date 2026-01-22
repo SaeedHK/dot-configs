@@ -75,5 +75,13 @@ return {
       { "<leader>gs", "<cmd>LazyGit<cr>", desc = "LazyGit" },
     },
     dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      vim.api.nvim_create_autocmd("TermOpen", {
+        pattern = "term://*lazygit*",
+        callback = function()
+          vim.keymap.set("t", "<Esc>", "<cmd>close<cr>", { buffer = true, silent = true })
+        end,
+      })
+    end,
   },
 }

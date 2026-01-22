@@ -65,9 +65,6 @@ return {
           map("<leader>e", vim.diagnostic.open_float, "Show diagnostics")
           map("[d", function() vim.diagnostic.jump({ count = -1 }) end, "Previous diagnostic")
           map("]d", function() vim.diagnostic.jump({ count = 1 }) end, "Next diagnostic")
-          map("<leader>lf", function()
-            vim.lsp.buf.format({ async = true })
-          end, "Format buffer")
         end,
       })
 
@@ -241,7 +238,7 @@ return {
       require("conform").setup({
         formatters_by_ft = {
           lua = { "stylua" },
-          python = { "black", "isort" },
+          python = { "ruff_format", "ruff_organize_imports" },
           javascript = { "prettier" },
           typescript = { "prettier" },
           javascriptreact = { "prettier" },
