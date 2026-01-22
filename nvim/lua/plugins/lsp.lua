@@ -90,12 +90,62 @@ return {
           end,
           -- Custom handler for pyright
           ["pyright"] = function()
+            local function get_python_path(workspace)
+              local util = require("lspconfig/util")
+              local path = util.path
+
+              -- Use activated virtualenv
+              if vim.env.VIRTUAL_ENV then
+                return path.join(vim.env.VIRTUAL_ENV, "bin", "python")
+              end
+
+              -- Find project root
+              local root = workspace
+                or util.root_pattern("pyproject.toml", "setup.py", "setup.cfg", ".git")(
+                  vim.api.nvim_buf_get_name(0)
+                )
+                or vim.fn.getcwd()
+
+              -- Check for local .venv (Poetry with in-project or manual venv)
+              local venv_path = path.join(root, ".venv", "bin", "python")
+              if vim.fn.executable(venv_path) == 1 then
+                return venv_path
+              end
+
+              -- Check for venv directory
+              venv_path = path.join(root, "venv", "bin", "python")
+              if vim.fn.executable(venv_path) == 1 then
+                return venv_path
+              end
+
+              -- Try Poetry environment
+              local poetry_lock = path.join(root, "poetry.lock")
+              if vim.fn.filereadable(poetry_lock) == 1 then
+                local handle = io.popen("cd " .. root .. " && poetry env info -p 2>/dev/null")
+                if handle then
+                  local poetry_venv = handle:read("*a"):gsub("%s+$", "")
+                  handle:close()
+                  if poetry_venv and poetry_venv ~= "" then
+                    return path.join(poetry_venv, "bin", "python")
+                  end
+                end
+              end
+
+              -- Fallback to system Python
+              return vim.fn.exepath("python3") or vim.fn.exepath("python") or "python"
+            end
+
             lspconfig.pyright.setup({
               capabilities = capabilities,
+              on_init = function(client)
+                client.config.settings.python.pythonPath = get_python_path(client.config.root_dir)
+              end,
               settings = {
                 python = {
                   analysis = {
                     typeCheckingMode = "basic",
+                    autoSearchPaths = true,
+                    useLibraryCodeForTypes = true,
                   },
                 },
               },
