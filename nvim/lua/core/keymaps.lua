@@ -1,0 +1,101 @@
+-- Keymaps
+local map = vim.keymap.set
+local opts = { noremap = true, silent = true }
+
+-- Leader key
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+-- Escape mappings
+map("i", "jj", "<Esc>", opts)
+map("i", "kk", "<Esc>", opts)
+
+-- Terminal escape
+map("t", "<S-Tab>", "<C-\\><C-n>", opts)
+map("t", "<Esc>", "<C-\\><C-n>", opts)
+map("t", "jj", "<C-\\><C-n>", opts)
+map("t", "kk", "<C-\\><C-n>", opts)
+
+-- Fast saving/exit
+map("n", "<leader>w", ":w!<CR>", opts)
+map("n", "<leader>qq", ":q!<CR>", opts)
+map("n", "<leader>ss", ":x<CR>", opts)
+
+-- Sudo save
+vim.api.nvim_create_user_command("W", "execute 'w !sudo tee % > /dev/null' <bar> edit!", {})
+
+-- Clear search highlight
+map("n", "<leader><CR>", ":noh<CR>", opts)
+
+-- Better navigation (HJKL remaps)
+map({ "n", "v" }, "K", "{", opts)
+map({ "n", "v" }, "J", "}", opts)
+map({ "n", "v" }, "H", "^", opts)
+map({ "n", "v" }, "L", "$", opts)
+
+-- Tab/Shift-Tab for indent
+map("n", "<Tab>", ">>", opts)
+map("n", "<S-Tab>", "<<", opts)
+map("v", "<Tab>", ">gv", opts)
+map("v", "<S-Tab>", "<gv", opts)
+
+-- Run macros with Q
+map("n", "Q", "@q", opts)
+
+-- Better yank/delete
+map("n", "Y", "y$", opts)
+map("n", "X", "v$x", opts)
+map("n", "yw", "yiw", opts)
+
+-- Block selection
+map("n", "vv", "V", opts)
+map("n", "vb", "<C-v>", opts)
+map("v", "ii", "I", opts)
+
+-- Search mode
+map("n", "<leader>a", "/", { noremap = true })
+map("n", "<leader>fr", ":%s/find/replace/gc", { noremap = true })
+
+-- Copy file path
+map("n", "<leader>ff", ':let @+ = expand("%")<CR>', opts)
+
+-- Window navigation
+map("n", "<C-h>", "<C-W>h", opts)
+map("n", "<C-l>", "<C-W>l", opts)
+map("n", "<C-j>", "<C-W>j", opts)
+map("n", "<C-k>", "<C-W>k", opts)
+
+-- Remap 0 to first non-blank
+map("n", "0", "^", opts)
+
+-- Buffer management
+map("n", "<leader>b", ":ls<CR>:b<Space>", { noremap = true })
+map("n", "<leader>d", ":bd!<CR>", opts)
+map("n", "<leader>h", ":bprevious<CR>", opts)
+map("n", "<leader>l", ":bnext<CR>", opts)
+
+-- Splits
+map("n", "<leader>sn", ":vnew<CR>", opts)
+map("n", "<leader>sh", ":new<CR>", opts)
+
+-- Open common files
+map("n", "<leader>oe", ":e ./.env<CR>", opts)
+map("n", "<leader>oz", ":e ~/.zshrc<CR>", opts)
+map("n", "<leader>os", ":e ~/.ssh/config<CR>", opts)
+map("n", "<leader>ov", ":e $MYVIMRC<CR>", opts)
+
+-- Reload config
+map("n", "<leader>vr", ":source $MYVIMRC<CR>", opts)
+
+-- Terminal
+map("n", "<leader>tt", ":tabnew term://zsh<CR>", opts)
+
+-- Start terminal in insert mode
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  command = "startinsert",
+})
+
+-- Visual mode search
+map("v", "*", [[:<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>]], opts)
+map("v", "#", [[:<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>]], opts)
