@@ -53,6 +53,7 @@ map("n", "X", "v$x", opts)
 
 -- Block selection
 map("n", "vb", "<C-v>", opts)
+map("n", "vv", "V", opts)
 map("v", "ii", "I", opts)
 
 -- Search mode
