@@ -50,6 +50,7 @@ map("n", "Q", "@q", opts)
 -- Better yank/delete
 map("n", "Y", "y$", opts)
 map("n", "X", "v$x", opts)
+map("v", "p", '"_dP', opts) -- Paste without yanking replaced text
 
 -- Block selection
 map("n", "vb", "<C-v>", opts)
