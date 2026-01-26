@@ -64,6 +64,9 @@ map("n", "<leader>fr", ":%s/find/replace/gc", { noremap = true })
 -- Copy file path
 map("n", "<leader>ff", ':let @+ = expand("%")<CR>', opts)
 
+-- Copy word under cursor to clipboard
+map("n", "<leader>yw", '"+yiw', opts)
+
 -- Window navigation
 map("n", "<C-h>", "<C-W>h", opts)
 map("n", "<C-l>", "<C-W>l", opts)
