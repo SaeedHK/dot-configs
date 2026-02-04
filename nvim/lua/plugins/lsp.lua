@@ -244,9 +244,15 @@ return {
           javascriptreact = { "prettier" },
           typescriptreact = { "prettier" },
           json = { "prettier" },
+          yaml = { "prettier" },
           html = { "prettier" },
           css = { "prettier" },
           ruby = { "rubocop" },
+        },
+        formatters = {
+          prettier = {
+            prepend_args = { "--tab-width", "4" },
+          },
         },
         format_on_save = {
           timeout_ms = 500,
