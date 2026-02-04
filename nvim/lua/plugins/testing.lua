@@ -11,6 +11,7 @@ return {
       "nvim-neotest/neotest-python",
       "olimorris/neotest-rspec",
       "nvim-neotest/neotest-jest",
+      "olimorris/neotest-phpunit",
     },
     keys = {
       {
@@ -74,6 +75,7 @@ return {
           require("neotest-jest")({
             jestCommand = "npm test --",
           }),
+          require("neotest-phpunit"),
         },
       })
     end,
