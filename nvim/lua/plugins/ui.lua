@@ -1,4 +1,33 @@
 return {
+  -- Bufferline (buffer tabs)
+  {
+    "akinsho/bufferline.nvim",
+    dependencies = "nvim-tree/nvim-web-devicons",
+    event = "VeryLazy",
+    keys = {
+      { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
+      { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
+      { "<leader>bd", "<cmd>bdelete<cr>", desc = "Delete buffer" },
+    },
+    config = function()
+      require("bufferline").setup({
+        options = {
+          numbers = "none",
+          close_command = "bdelete! %d",
+          diagnostics = "nvim_lsp",
+          offsets = {
+            {
+              filetype = "NvimTree",
+              text = "File Explorer",
+              highlight = "Directory",
+              separator = true,
+            },
+          },
+        },
+      })
+    end,
+  },
+
   -- Lualine (statusline)
   {
     "nvim-lualine/lualine.nvim",
