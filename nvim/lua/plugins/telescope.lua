@@ -22,6 +22,11 @@ return {
       { "<leader>fw", "<cmd>Telescope grep_string<cr>", desc = "Grep word under cursor" },
     },
     config = function()
+      if vim.fn.executable("fd") == 0 then
+        vim.notify("telescope: fd not found, please install fd-find", vim.log.levels.ERROR)
+        return
+      end
+
       local telescope = require("telescope")
       local actions = require("telescope.actions")
 
@@ -43,7 +48,7 @@ return {
         },
         pickers = {
           find_files = {
-            hidden = true,
+            find_command = { "fd", "--type", "f", "--hidden", "--follow" },
           },
         },
       })
