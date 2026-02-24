@@ -42,7 +42,6 @@ map("v", "<S-Tab>", "<gv", opts)
 map("n", "Q", "@q", opts)
 
 -- Better yank/delete
-map("n", "Y", "y$", opts)
 map("n", "X", "v$x", opts)
 map("v", "p", '"_dP', opts) -- Paste without yanking replaced text
 
@@ -50,10 +49,6 @@ map("v", "p", '"_dP', opts) -- Paste without yanking replaced text
 map("n", "vb", "<C-v>", opts)
 map("n", "vv", "V", opts)
 map("v", "ii", "I", opts)
-
--- Search mode
-map("n", "<leader>a", "/", { noremap = true })
-map("n", "<leader>fr", ":%s/find/replace/gc", { noremap = true })
 
 -- Copy file path
 map("n", "<leader>ff", ':let @+ = expand("%")<CR>', opts)
@@ -72,7 +67,6 @@ map("n", "0", "^", opts)
 map("n", "g0", "0", opts)
 
 -- Buffer management
-map("n", "<leader>b", ":ls<CR>:b<Space>", { noremap = true })
 map("n", "<leader>d", ":bd!<CR>", opts)
 -- Splits
 map("n", "<leader>sn", ":vnew<CR>", opts)
@@ -87,6 +81,3 @@ map("n", "<leader>ov", ":e $MYVIMRC<CR>", opts)
 -- Reload config
 map("n", "<leader>vr", ":source $MYVIMRC<CR>", opts)
 
--- Visual mode search
-map("v", "*", [[:<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>]], opts)
-map("v", "#", [[:<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>]], opts)
