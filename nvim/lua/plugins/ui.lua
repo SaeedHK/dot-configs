@@ -1,4 +1,22 @@
 return {
+  -- Colorizer: inline color previews for hex/rgb values
+  {
+    "NvChad/nvim-colorizer.lua",
+    event = { "BufReadPost", "BufNewFile" },
+    config = function()
+      require("colorizer").setup({
+        filetypes = { "*" },
+        user_default_options = {
+          RGB = true,
+          RRGGBB = true,
+          names = false,
+          css = true,
+          mode = "background",
+        },
+      })
+    end,
+  },
+
   -- Bufferline (buffer tabs)
   {
     "akinsho/bufferline.nvim",
@@ -86,7 +104,10 @@ return {
         { "<leader>l", group = "LSP" },
         { "<leader>t", group = "Test" },
         { "<leader>o", group = "Open" },
-        { "<leader>s", group = "Split" },
+        { "<leader>s", group = "Split/Search" },
+        { "<leader>d", group = "Debug" },
+        { "<leader>p", group = "Pins (Harpoon)" },
+        { "<leader>x", group = "Trouble" },
       })
     end,
   },
@@ -112,7 +133,7 @@ return {
           bottom_search = true,
           command_palette = true,
           long_message_to_split = true,
-          inc_rename = false,
+          inc_rename = true,
           lsp_doc_border = true,
         },
       })

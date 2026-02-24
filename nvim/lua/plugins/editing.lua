@@ -1,4 +1,37 @@
 return {
+  -- Flash: jump anywhere on screen
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash jump" },
+      { "S", mode = { "n", "o" }, function() require("flash").treesitter() end, desc = "Flash treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Flash remote" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Flash treesitter search" },
+      { "<C-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle flash search" },
+    },
+  },
+
+  -- Undotree: visualize undo history
+  {
+    "mbbill/undotree",
+    keys = {
+      { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Toggle undotree" },
+    },
+  },
+
+  -- Grug-far: project-wide find and replace
+  {
+    "MagicDuck/grug-far.nvim",
+    keys = {
+      { "<leader>sr", function() require("grug-far").open() end, desc = "Search & replace" },
+      { "<leader>sw", function() require("grug-far").open({ prefills = { search = vim.fn.expand("<cword>") } }) end, desc = "Search word under cursor" },
+    },
+    config = function()
+      require("grug-far").setup()
+    end,
+  },
+
   -- Autopairs
   {
     "windwp/nvim-autopairs",

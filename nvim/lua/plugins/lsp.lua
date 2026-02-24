@@ -59,7 +59,9 @@ return {
           map("gr", vim.lsp.buf.references, "Go to references")
           map("gi", vim.lsp.buf.implementation, "Go to implementation")
           map("gt", vim.lsp.buf.type_definition, "Go to type definition")
-          map("<leader>rn", vim.lsp.buf.rename, "Rename")
+          vim.keymap.set("n", "<leader>rn", function()
+            return ":IncRename " .. vim.fn.expand("<cword>")
+          end, { buffer = bufnr, expr = true, desc = "Rename (incremental)" })
           map("<leader>ca", vim.lsp.buf.code_action, "Code action")
           map("gK", vim.lsp.buf.hover, "Hover documentation")
           map("<leader>e", vim.diagnostic.open_float, "Show diagnostics")
@@ -167,6 +169,7 @@ return {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "rafamadriz/friendly-snippets",
@@ -217,6 +220,45 @@ return {
           }),
         },
       })
+      -- Cmdline completion for / search
+      cmp.setup.cmdline("/", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = { { name = "buffer" } },
+      })
+
+      -- Cmdline completion for : commands
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources(
+          { { name = "path" } },
+          { { name = "cmdline" } }
+        ),
+      })
+    end,
+  },
+
+  -- Incremental rename with live preview
+  {
+    "smjonas/inc-rename.nvim",
+    cmd = "IncRename",
+    config = function()
+      require("inc_rename").setup()
+    end,
+  },
+
+  -- Trouble: diagnostics, references, quickfix panel
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    keys = {
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Workspace diagnostics" },
+      { "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Document diagnostics" },
+      { "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix list" },
+      { "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "Location list" },
+      { "<leader>xs", "<cmd>Trouble lsp_document_symbols toggle<cr>", desc = "Document symbols" },
+    },
+    config = function()
+      require("trouble").setup()
     end,
   },
 
