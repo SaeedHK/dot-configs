@@ -74,9 +74,6 @@ map("n", "g0", "0", opts)
 -- Buffer management
 map("n", "<leader>b", ":ls<CR>:b<Space>", { noremap = true })
 map("n", "<leader>d", ":bd!<CR>", opts)
-map("n", "<leader>h", ":bprevious<CR>", opts)
-map("n", "<leader>l", ":bnext<CR>", opts)
-
 -- Splits
 map("n", "<leader>sn", ":vnew<CR>", opts)
 map("n", "<leader>sh", ":new<CR>", opts)
