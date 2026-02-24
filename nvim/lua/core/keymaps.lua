@@ -10,12 +10,6 @@ vim.g.maplocalleader = " "
 map("i", "jj", "<Esc>", opts)
 map("i", "kk", "<Esc>", opts)
 
--- Terminal escape
-map("t", "<S-Tab>", "<C-\\><C-n>", opts)
-map("t", "<Esc>", "<C-\\><C-n>", opts)
-map("t", "jj", "<C-\\><C-n>", opts)
-map("t", "kk", "<C-\\><C-n>", opts)
-
 -- Fast saving/exit
 map("n", "<leader>w", ":w!<CR>", opts)
 map("n", "<leader>qq", ":q!<CR>", opts)
@@ -95,15 +89,6 @@ map("n", "<leader>ov", ":e $MYVIMRC<CR>", opts)
 
 -- Reload config
 map("n", "<leader>vr", ":source $MYVIMRC<CR>", opts)
-
--- Terminal
-map("n", "<leader>tt", ":tabnew term://zsh<CR>", opts)
-
--- Start terminal in insert mode
-vim.api.nvim_create_autocmd("TermOpen", {
-  pattern = "*",
-  command = "startinsert",
-})
 
 -- Visual mode search
 map("v", "*", [[:<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>]], opts)

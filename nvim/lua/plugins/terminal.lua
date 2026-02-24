@@ -18,8 +18,8 @@ return {
         end,
       })
 
-      -- Escape terminal mode with Esc
-      vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+      -- Esc enters normal mode (for navigation/selection), C-\ closes
+      vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Enter normal mode in terminal" })
     end,
   },
 }
