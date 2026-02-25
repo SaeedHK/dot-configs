@@ -1,83 +1,15 @@
 return {
-  -- Neotest
   {
-    "nvim-neotest/neotest",
-    dependencies = {
-      "nvim-neotest/nvim-nio",
-      "nvim-lua/plenary.nvim",
-      "antoinemadec/FixCursorHold.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      -- Test adapters
-      "nvim-neotest/neotest-python",
-      "olimorris/neotest-rspec",
-      "nvim-neotest/neotest-jest",
-      "olimorris/neotest-phpunit",
-    },
+    "vim-test/vim-test",
     keys = {
-      {
-        "<leader>tn",
-        function()
-          require("neotest").run.run()
-        end,
-        desc = "Run nearest test",
-      },
-      {
-        "<leader>tf",
-        function()
-          require("neotest").run.run(vim.fn.expand("%"))
-        end,
-        desc = "Run file tests",
-      },
-      {
-        "<leader>ts",
-        function()
-          require("neotest").run.run({ suite = true })
-        end,
-        desc = "Run test suite",
-      },
-      {
-        "<leader>tl",
-        function()
-          require("neotest").run.run_last()
-        end,
-        desc = "Run last test",
-      },
-      {
-        "<leader>to",
-        function()
-          require("neotest").output.open({ enter = true })
-        end,
-        desc = "Show test output",
-      },
-      {
-        "<leader>tp",
-        function()
-          require("neotest").output_panel.toggle()
-        end,
-        desc = "Toggle output panel",
-      },
-      {
-        "<leader>tS",
-        function()
-          require("neotest").summary.toggle()
-        end,
-        desc = "Toggle summary",
-      },
+      { "<leader>tn", "<cmd>TestNearest<cr>", desc = "Run nearest test" },
+      { "<leader>tf", "<cmd>TestFile<cr>",    desc = "Run file tests" },
+      { "<leader>ts", "<cmd>TestSuite<cr>",   desc = "Run test suite" },
+      { "<leader>tl", "<cmd>TestLast<cr>",    desc = "Run last test" },
+      { "<leader>tv", "<cmd>TestVisit<cr>",   desc = "Visit test file" },
     },
-    config = function()
-      require("neotest").setup({
-        adapters = {
-          require("neotest-python")({
-            dap = { justMyCode = false },
-            runner = "pytest",
-          }),
-          require("neotest-rspec"),
-          require("neotest-jest")({
-            jestCommand = "npm test --",
-          }),
-          require("neotest-phpunit"),
-        },
-      })
+    init = function()
+      vim.g["test#strategy"] = "neovim"  -- run in a split terminal
     end,
   },
 }
