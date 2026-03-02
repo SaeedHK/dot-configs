@@ -9,10 +9,7 @@ return {
       require("toggleterm").setup({
         size = 15,
         open_mapping = [[<C-\>]],
-        direction = "float",
-        float_opts = {
-          border = "curved",
-        },
+        direction = "horizontal",
         on_open = function()
           vim.cmd("startinsert")
         end,
