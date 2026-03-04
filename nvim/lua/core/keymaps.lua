@@ -77,6 +77,9 @@ map("n", "<leader>oe", ":e ./.env<CR>", opts)
 map("n", "<leader>oz", ":e ~/.zshrc<CR>", opts)
 map("n", "<leader>os", ":e ~/.ssh/config<CR>", opts)
 map("n", "<leader>ov", ":e $MYVIMRC<CR>", opts)
+map("n", "<leader>oc", function()
+  require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+end, opts)
 
 -- Reload config
 map("n", "<leader>vr", ":source $MYVIMRC<CR>", opts)
