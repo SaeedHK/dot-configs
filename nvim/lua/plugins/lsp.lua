@@ -290,6 +290,7 @@ return {
           html = { "prettier" },
           css = { "prettier" },
           ruby = { "rubocop" },
+          php = { "php_cs_fixer" },
         },
         formatters = {
           prettier = {
