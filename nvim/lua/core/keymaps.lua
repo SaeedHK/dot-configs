@@ -13,6 +13,7 @@ map("i", "kk", "<Esc>", opts)
 -- Fast saving/exit
 map("n", "<leader>w", ":w!<CR>", opts)
 map("n", "<leader>qq", ":q!<CR>", opts)
+map("n", "<leader>dd", ":q!<CR>", opts)
 map("n", "<leader>ss", ":x<CR>", opts)
 
 -- Sudo save
@@ -67,6 +68,8 @@ map("n", "0", "^", opts)
 map("n", "g0", "0", opts)
 
 -- Buffer management
+map("n", "<leader>h", ":bprevious<CR>", opts)
+map("n", "<leader>l", ":bnext<CR>", opts)
 map("n", "<leader>bd", ":bd!<CR>", opts)
 -- Splits
 map("n", "<leader>sn", ":vnew<CR>", opts)

@@ -8,8 +8,9 @@ opt.swapfile = false
 opt.backup = false
 opt.writebackup = false
 opt.undofile = true
-opt.updatetime = 250
+opt.updatetime = 100
 opt.timeoutlen = 300
+opt.ttimeoutlen = 10
 
 -- UI
 opt.number = true

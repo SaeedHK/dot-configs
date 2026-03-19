@@ -78,6 +78,7 @@ return {
           "jsonls",
           "pyright",
           "eslint",
+          "intelephense",
         },
         automatic_installation = true,
         handlers = {
@@ -289,6 +290,7 @@ return {
           yaml = { "prettier" },
           html = { "prettier" },
           css = { "prettier" },
+          markdown = { "prettier" },
           ruby = { "rubocop" },
           php = { "php_cs_fixer" },
         },
@@ -296,9 +298,12 @@ return {
           prettier = {
             prepend_args = { "--tab-width", "4" },
           },
+          php_cs_fixer = {
+            args = { "fix", "--rules", "@PSR12,no_extra_blank_lines", "$FILENAME" },
+          },
         },
         format_on_save = {
-          timeout_ms = 500,
+          timeout_ms = 2000,
           lsp_fallback = true,
         },
       })
